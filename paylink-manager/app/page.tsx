@@ -5,7 +5,7 @@ import { Suspense } from 'react'
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-gray-50">
-      <header className="bg-[#FC4C02] px-6 pt-10 pb-24 relative overflow-hidden">
+      <header className="bg-[#FC4C02] px-6 pt-10 pb-36 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10"
           style={{ backgroundImage: 'radial-gradient(circle at 80% 50%, white 0%, transparent 60%)' }}
         />
@@ -20,7 +20,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      <div className="max-w-md mx-auto px-4 -mt-14 mb-10">
+      <div className="max-w-md mx-auto px-4 mt-6 mb-10">
         <CreateLinkForm />
 
         <div className="flex items-center gap-2 mb-4">

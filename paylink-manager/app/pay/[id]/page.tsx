@@ -12,7 +12,7 @@ async function getLink(id: string) {
 export default async function PayPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const link = await getLink(id)
-  
+
   if (!link) {
     notFound()
   }
@@ -37,7 +37,7 @@ export default async function PayPage({ params }: { params: Promise<{ id: string
           <p className="text-gray-400 text-sm mb-1">Total a pagar</p>
           <p className="text-4xl font-black text-gray-800">
             ${link.amount.toLocaleString('es-MX')}
-            <span className="text-lg font-normal text-gray-400 ml-1">MXN</span>
+            <span className="text-lg font-normal text-gray-400 ml-1">Arg</span>
           </p>
         </div>
 
@@ -46,7 +46,7 @@ export default async function PayPage({ params }: { params: Promise<{ id: string
 
         {/* Footer */}
         <div className="text-center py-4 border-t border-gray-100">
-          <p className="text-xs text-gray-400">© 2026 PayClip, Inc.</p>
+          <p className="text-xs text-gray-400">© 2026 PayLink, Inc.</p>
         </div>
 
       </div>
