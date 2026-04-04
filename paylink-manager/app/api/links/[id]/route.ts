@@ -3,15 +3,16 @@ import clientPromise from '@/lib/mongodb'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const client = await clientPromise
     const db = client.db('paylink')
 
     const link = await db
       .collection('links')
-      .findOne({ id: params.id })
+      .findOne({ id })
 
     if (!link) {
       return NextResponse.json(
@@ -29,17 +30,17 @@ export async function GET(
   }
 }
 
-// PATCH - actualiza el status a 'paid'
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const client = await clientPromise
     const db = client.db('paylink')
 
     await db.collection('links').updateOne(
-      { id: params.id },
+      { id },
       { $set: { status: 'paid', paidAt: new Date() } }
     )
 
