@@ -5,7 +5,7 @@ import { Suspense } from 'react'
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-gray-50">
-      <header className="bg-[#FC4C02] px-6 pt-10 pb-36 relative overflow-hidden">
+      <header className="bg-[#FC4C02] px-6 pt-10 pb-10 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10"
           style={{ backgroundImage: 'radial-gradient(circle at 80% 50%, white 0%, transparent 60%)' }}
         />
