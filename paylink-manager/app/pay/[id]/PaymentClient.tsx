@@ -207,7 +207,7 @@ export default function PaymentClient({ linkId, status }: Props) {
         )}
       </button>
 
-      <p className="text-xs text-center text-gray-400">🔒 Pago seguro procesado por Clip</p>
+      <p className="text-xs text-center text-gray-400">🔒 Pago seguro procesado por PayLink</p>
     </div>
   )
 }

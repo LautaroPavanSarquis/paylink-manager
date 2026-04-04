@@ -12,9 +12,9 @@ export default function HomePage() {
         <div className="max-w-md mx-auto relative">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-              <span className="text-[#FC4C02] font-black text-sm">C</span>
+              <span className="text-[#FC4C02] font-black text-sm">P</span>
             </div>
-            <h1 className="text-white text-2xl font-black tracking-tight">PayLink</h1>
+            <h1 className="text-white text-2xl font-black tracking-tight">ayLink</h1>
           </div>
           <p className="text-orange-100 text-sm">Paylink Manager</p>
         </div>
