@@ -1,53 +1,58 @@
 import { NextResponse } from 'next/server'
 import clientPromise from '@/lib/mongodb'
 
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+// GET - trae todos los links
+export async function GET() {
   try {
-    const { id } = await params
     const client = await clientPromise
     const db = client.db('paylink')
-
-    const link = await db
+    const links = await db
       .collection('links')
-      .findOne({ id })
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray()
 
-    if (!link) {
-      return NextResponse.json(
-        { error: 'Link no encontrado' },
-        { status: 404 }
-      )
-    }
-
-    return NextResponse.json(link)
+    return NextResponse.json(links)
   } catch (error) {
     return NextResponse.json(
-      { error: 'Error al obtener el link' },
+      { error: 'Error al obtener los links' },
       { status: 500 }
     )
   }
 }
 
-export async function PATCH(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+// POST - crea un nuevo link
+export async function POST(request: Request) {
   try {
-    const { id } = await params
+    const body = await request.json()
+    const { name, amount, description } = body
+
+    // Validación básica
+    if (!name || !amount) {
+      return NextResponse.json(
+        { error: 'Nombre y monto son requeridos' },
+        { status: 400 }
+      )
+    }
+
     const client = await clientPromise
     const db = client.db('paylink')
 
-    await db.collection('links').updateOne(
-      { id },
-      { $set: { status: 'paid', paidAt: new Date() } }
-    )
+    const newLink = {
+      name,
+      amount: Number(amount),
+      description: description || '',
+      status: 'pending',
+      createdAt: new Date(),
+      id: crypto.randomUUID(),
+    }
 
-    return NextResponse.json({ success: true })
+    await db.collection('links').insertOne(newLink)
+
+    return NextResponse.json(newLink, { status: 201 })
   } catch (error) {
     return NextResponse.json(
-      { error: 'Error al actualizar el link' },
+      { error: 'Error al crear el link' },
       { status: 500 }
     )
   }
