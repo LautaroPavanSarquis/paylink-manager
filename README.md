@@ -1,8 +1,8 @@
 # Paylink Manager
 
-Gestor de links de pago inspirado en el checkout de Clip. Un comercio crea links con nombre, monto y descripción. Cada link genera una página pública de checkout donde el comprador puede pagar.
+Gestor de links de pago. Un comercio crea links con nombre, monto y descripción. Cada link genera una página pública de checkout donde el comprador puede pagar.
 
-Construido como proyecto personal para explorar Next.js App Router, Server Components y deploy en Vercel.
+Construido como proyecto personal para explorar Next.js App Router, Server Components y bases de datos noSQL.
 
 ---
 
@@ -30,8 +30,8 @@ Construido como proyecto personal para explorar Next.js App Router, Server Compo
 - Dashboard que refleja el estado en tiempo real
 - Skeleton screen automático mientras carga el checkout
 - Página de éxito post-pago
-- Mobile-first, max-width 515px inspirado en el checkout real de Clip
-- Color principal `#FC4C02` y tipografía Inter, igual que Clip
+- Mobile-first, max-width 515px 
+- Color principal `#FC4C02` y tipografía Inter
 
 ---
 
@@ -90,4 +90,4 @@ Abrir [http://localhost:3000](http://localhost:3000)
 - [ ] Rate limiting en endpoints
 - [ ] Índice en MongoDB sobre el campo `id`
 - [ ] ISR para cachear páginas de checkout
-- [ ] Consumir la API real de Clip
+
