@@ -24,7 +24,7 @@ export default async function PayPage({ params }: { params: Promise<{ id: string
         {/* Header con info del comercio */}
         <div className="bg-[#FC4C02] p-6 text-center">
           <div className="w-16 h-16 bg-white rounded-full mx-auto mb-3 flex items-center justify-center">
-            <span className="text-[#FC4C02] font-black text-xl">C</span>
+            <span className="text-[#FC4C02] font-black text-xl">PayLink</span>
           </div>
           <h1 className="text-white font-bold text-lg">{link.name}</h1>
           {link.description && (
