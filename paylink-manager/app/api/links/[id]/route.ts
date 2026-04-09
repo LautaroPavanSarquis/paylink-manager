@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import clientPromise from '@/lib/mongodb'
-import { paymentLimiter } from '@/lib/rateLimit'
+import { paymentLimiter } from '@/lib/ratelimit'
 
 export async function GET(
   request: NextRequest,

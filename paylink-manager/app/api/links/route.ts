@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import clientPromise from '@/lib/mongodb'
-import { createLinkLimiter } from '@/lib/rateLimit'
+import { createLinkLimiter } from '@/lib/ratelimit'
 
 export const dynamic = 'force-dynamic'
 
