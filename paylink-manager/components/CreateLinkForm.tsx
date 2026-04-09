@@ -40,8 +40,7 @@ export default function CreateLinkForm() {
       setDescription('')
       setAmountError('')
       router.refresh()
-      router.push('/')
-    }
+      }
 
     setLoading(false)
   }
