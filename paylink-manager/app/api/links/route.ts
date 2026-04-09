@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import clientPromise from '@/lib/mongodb'
-
-export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
@@ -13,9 +12,7 @@ export async function GET() {
       .sort({ createdAt: -1 })
       .toArray()
 
-    return NextResponse.json(links, {
-      headers: { 'Cache-Control': 'no-store' },
-    })
+    return NextResponse.json(links)
   } catch (error) {
     return NextResponse.json(
       { error: 'Error al obtener los links' },
@@ -58,6 +55,7 @@ export async function POST(request: Request) {
     }
 
     await db.collection('links').insertOne(newLink)
+    revalidatePath('/')
 
     return NextResponse.json(newLink, { status: 201 })
   } catch (error) {

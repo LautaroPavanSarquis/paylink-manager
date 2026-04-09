@@ -2,8 +2,6 @@ import CreateLinkForm from '@/components/CreateLinkForm'
 import PaylinkList from '@/components/PaylinkList'
 import { Suspense } from 'react'
 
-export const dynamic = 'force-dynamic'
-
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-gray-50">

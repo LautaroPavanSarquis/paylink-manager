@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import clientPromise from '@/lib/mongodb'
 
 export async function GET(
@@ -41,6 +42,8 @@ export async function PATCH(
       { id },
       { $set: { status: 'paid', paidAt: new Date() } }
     )
+
+    revalidatePath('/')
 
     return NextResponse.json({ success: true })
   } catch (error) {
