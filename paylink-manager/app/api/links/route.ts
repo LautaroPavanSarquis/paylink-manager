@@ -1,7 +1,9 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import clientPromise from '@/lib/mongodb'
+import { createLinkLimiter } from '@/lib/rateLimit'
 
-// GET - trae todos los links
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const client = await clientPromise
@@ -12,7 +14,9 @@ export async function GET() {
       .sort({ createdAt: -1 })
       .toArray()
 
-    return NextResponse.json(links)
+    return NextResponse.json(links, {
+      headers: { 'Cache-Control': 'no-store' },
+    })
   } catch (error) {
     return NextResponse.json(
       { error: 'Error al obtener los links' },
@@ -21,16 +25,33 @@ export async function GET() {
   }
 }
 
-// POST - crea un nuevo link
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for') ?? 'anonymous'
+  const { success, remaining } = await createLinkLimiter.limit(ip)
+
+  if (!success) {
+    return NextResponse.json(
+      { error: 'Demasiados intentos. Esperá un momento e intentá de nuevo.' },
+      { status: 429 }
+    )
+  }
+
   try {
     const body = await request.json()
     const { name, amount, description } = body
 
-    // Validación básica
-    if (!name || !amount) {
+    if (!name || amount === undefined || amount === null || amount === '') {
       return NextResponse.json(
         { error: 'Nombre y monto son requeridos' },
+        { status: 400 }
+      )
+    }
+
+    const numericAmount = Number(amount)
+
+    if (isNaN(numericAmount) || numericAmount <= 0) {
+      return NextResponse.json(
+        { error: 'El monto debe ser un número mayor a cero' },
         { status: 400 }
       )
     }
@@ -40,7 +61,7 @@ export async function POST(request: Request) {
 
     const newLink = {
       name,
-      amount: Number(amount),
+      amount: numericAmount,
       description: description || '',
       status: 'pending',
       createdAt: new Date(),

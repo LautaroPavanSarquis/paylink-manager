@@ -1,8 +1,9 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import clientPromise from '@/lib/mongodb'
+import { paymentLimiter } from '@/lib/rateLimit'
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -10,9 +11,7 @@ export async function GET(
     const client = await clientPromise
     const db = client.db('paylink')
 
-    const link = await db
-      .collection('links')
-      .findOne({ id })
+    const link = await db.collection('links').findOne({ id })
 
     if (!link) {
       return NextResponse.json(
@@ -31,9 +30,19 @@ export async function GET(
 }
 
 export async function PATCH(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const ip = request.headers.get('x-forwarded-for') ?? 'anonymous'
+  const { success } = await paymentLimiter.limit(ip)
+
+  if (!success) {
+    return NextResponse.json(
+      { error: 'Demasiados intentos de pago. Esperá un momento e intentá de nuevo.' },
+      { status: 429 }
+    )
+  }
+
   try {
     const { id } = await params
     const client = await clientPromise

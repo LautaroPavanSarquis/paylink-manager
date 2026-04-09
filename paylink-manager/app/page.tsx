@@ -2,6 +2,8 @@ import CreateLinkForm from '@/components/CreateLinkForm'
 import PaylinkList from '@/components/PaylinkList'
 import { Suspense } from 'react'
 
+export const dynamic = 'force-dynamic'
+
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-gray-50">
@@ -28,16 +30,7 @@ export default function HomePage() {
           <h2 className="text-gray-800 font-bold">Tus links</h2>
         </div>
 
-        <Suspense fallback={
-          <div className="flex flex-col gap-3">
-            {[1,2,3].map(i => (
-              <div key={i} className="bg-white rounded-2xl p-4 animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-              </div>
-            ))}
-          </div>
-        }>
+        <Suspense fallback={null}>
           <PaylinkList />
         </Suspense>
       </div>
