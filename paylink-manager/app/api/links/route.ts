@@ -1,6 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import clientPromise from '@/lib/mongodb'
-import { createLinkLimiter } from '@/lib/ratelimit'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,17 +24,7 @@ export async function GET() {
   }
 }
 
-export async function POST(request: NextRequest) {
-  const ip = request.headers.get('x-forwarded-for') ?? 'anonymous'
-  const { success, remaining } = await createLinkLimiter.limit(ip)
-
-  if (!success) {
-    return NextResponse.json(
-      { error: 'Demasiados intentos. Esperá un momento e intentá de nuevo.' },
-      { status: 429 }
-    )
-  }
-
+export async function POST(request: Request) {
   try {
     const body = await request.json()
     const { name, amount, description } = body

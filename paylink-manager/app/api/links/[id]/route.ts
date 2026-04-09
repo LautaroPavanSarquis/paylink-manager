@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import clientPromise from '@/lib/mongodb'
-import { paymentLimiter } from '@/lib/ratelimit'
 
 export async function GET(
   request: NextRequest,
@@ -33,16 +32,6 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const ip = request.headers.get('x-forwarded-for') ?? 'anonymous'
-  const { success } = await paymentLimiter.limit(ip)
-
-  if (!success) {
-    return NextResponse.json(
-      { error: 'Demasiados intentos de pago. Esperá un momento e intentá de nuevo.' },
-      { status: 429 }
-    )
-  }
-
   try {
     const { id } = await params
     const client = await clientPromise

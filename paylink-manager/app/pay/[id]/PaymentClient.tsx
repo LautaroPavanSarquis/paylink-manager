@@ -37,7 +37,6 @@ function validateCard(number: string, expiry: string, cvv: string, name: string)
   }
 
   if (cvv.length < 3) errors.cvv = 'CVV inválido'
-
   if (name.trim().length < 3) errors.name = 'Ingresá el nombre completo'
 
   return errors
@@ -87,7 +86,6 @@ export default function PaymentClient({ linkId, status }: Props) {
   return (
     <div className="p-6 flex flex-col gap-4">
 
-      {/* Selector de método */}
       <div className="flex gap-3">
         <button
           onClick={() => setMethod('card')}
@@ -111,10 +109,8 @@ export default function PaymentClient({ linkId, status }: Props) {
         </button>
       </div>
 
-      {/* Campos de tarjeta */}
       {method === 'card' && (
         <div className="flex flex-col gap-3">
-
           <div className="flex flex-col gap-1">
             <input
               type="text"
@@ -180,7 +176,6 @@ export default function PaymentClient({ linkId, status }: Props) {
             />
             {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
           </div>
-
         </div>
       )}
 
@@ -205,6 +200,14 @@ export default function PaymentClient({ linkId, status }: Props) {
         ) : (
           'Pagar ahora'
         )}
+      </button>
+
+      <button
+        onClick={() => router.back()}
+        disabled={loading}
+        className="text-gray-400 text-sm font-medium py-2 rounded-xl hover:text-gray-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
+      >
+        ← Volver
       </button>
 
       <p className="text-xs text-center text-gray-400">🔒 Pago seguro procesado por PayLink</p>

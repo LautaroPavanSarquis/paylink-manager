@@ -1,15 +1,31 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function CreateLinkForm() {
   const [name, setName] = useState('')
   const [amount, setAmount] = useState('')
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(false)
+  const [amountError, setAmountError] = useState('')
+  const router = useRouter()
+
+  function validateAmount(value: string): boolean {
+    const num = Number(value)
+    if (num <= 0) {
+      setAmountError('El monto debe ser mayor a cero')
+      return false
+    }
+    setAmountError('')
+    return true
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+
+    if (!validateAmount(amount)) return
+
     setLoading(true)
 
     const response = await fetch('/api/links', {
@@ -22,7 +38,9 @@ export default function CreateLinkForm() {
       setName('')
       setAmount('')
       setDescription('')
-      window.location.reload()
+      setAmountError('')
+      router.refresh()
+      router.push('/')
     }
 
     setLoading(false)
@@ -62,11 +80,20 @@ export default function CreateLinkForm() {
               type="number"
               placeholder="0.00"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              min="0.01"
+              step="0.01"
+              onChange={(e) => {
+                setAmount(e.target.value)
+                if (amountError) validateAmount(e.target.value)
+              }}
+              onBlur={(e) => validateAmount(e.target.value)}
               required
-              className="border border-gray-200 rounded-xl pl-8 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FC4C02] focus:border-transparent transition-all w-full"
+              className={`border rounded-xl pl-8 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FC4C02] focus:border-transparent transition-all w-full ${
+                amountError ? 'border-red-400 bg-red-50' : 'border-gray-200'
+              }`}
             />
           </div>
+          {amountError && <p className="text-red-500 text-xs">{amountError}</p>}
         </div>
 
         <div className="flex flex-col gap-1">
